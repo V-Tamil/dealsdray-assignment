@@ -1,0 +1,22 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.title {
+  text-align: center;
+}
+.Login_App {
+  width: 40%;
+  margin: 100px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 5px;
+}
+.Login_App input {
+  padding: 10px;
+}
+.btn {
+  padding: 10px;
+}

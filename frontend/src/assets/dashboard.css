@@ -1,0 +1,19 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.main_container {
+  width: 80%;
+  margin: 20px auto;
+  border: 1px solid black;
+}
+.main_title {
+  background-color: yellow;
+  padding: 5px;
+}
+.main_content {
+  margin: 50px 10px;
+  text-align: center;
+}

@@ -1,0 +1,19 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 14px;
+  padding-block: 4px;
+  border-bottom: 1px solid black;
+}
+
+.logo {
+  font-weight: 600;
+}
+
+.menu-list {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  list-style: none;
+}
