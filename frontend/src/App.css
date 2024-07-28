@@ -1,22 +1,44 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 .title {
+  font-weight: 500;
+  color: rgb(39, 38, 38);
   text-align: center;
 }
+.Login_container {
+  max-width: 500px;
+  margin: 10% auto;
+  padding: 50px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 .Login_App {
-  width: 40%;
-  margin: 100px auto;
+  width: 350px;
+  margin: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  border-radius: 5px;
+  gap: 15px;
 }
 .Login_App input {
+  border: 1px solid rgb(139, 137, 137);
+  border-radius: 5px;
   padding: 10px;
 }
-.btn {
+.sub_btn {
+  background-color: #007bff;
+  color: white;
   padding: 10px;
+  border-radius: 5px;
+  border: none;
+}
+.sub_btn:hover {
+  background-color: #0359b6;
+}
+.login_signup {
+  font-weight: 400;
+  color: rgb(46, 46, 46);
+  text-align: center;
+}
+.login_link {
+  text-decoration: none;
+  color: #0056b3;
 }

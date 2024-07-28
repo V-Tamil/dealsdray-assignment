@@ -1,19 +1,14 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 .main_container {
-  width: 80%;
-  margin: 20px auto;
-  border: 1px solid black;
+  max-width: 800px;
+  margin: 0 auto;
 }
 .main_title {
-  background-color: yellow;
+  color: rgb(27, 26, 26);
   padding: 5px;
+  font-weight: 400;
 }
 .main_content {
+  font-weight: 480;
   margin: 50px 10px;
   text-align: center;
 }

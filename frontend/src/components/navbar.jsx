@@ -7,10 +7,14 @@ function Navbar() {
     <nav className="navbar">
       <h2 className="logo">Logo</h2>
       <ul className="menu-list">
-        <Link to="/dashboard">Home</Link>
-        <Link to="/employee/list">Employee List</Link>
+        <Link to="/dashboard" className="link">
+          Home
+        </Link>
+        <Link to="/employee/list" className="link">
+          Employee List
+        </Link>
       </ul>
-      <button>Logout</button>
+      <button className="btn">Logout</button>
     </nav>
   );
 }

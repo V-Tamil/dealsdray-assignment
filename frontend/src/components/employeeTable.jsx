@@ -6,49 +6,94 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-function EmployeeTable({ data }) {
+function EmployeeTable(props) {
   const [sorting, setSorting] = useState([]);
 
   const columns = useMemo(
     () => [
       {
-        accessorKey: "_id",
+        accessorKey: "employeeId",
         cell: (info) => info.getValue(),
-        header: "User ID",
+        header: "Serial No",
+      },
+      {
+        accessorKey: "image",
+        cell: (info) => (
+          <img className="dp-image" src={info.getValue()} alt="" />
+        ),
+        header: "Image",
+      },
+      {
+        accessorKey: "name",
+        cell: (info) => info.getValue(),
+        header: "Name",
+      },
+      {
+        accessorKey: "email",
+        cell: (info) => info.getValue(),
+        header: "Email",
+      },
+      {
+        accessorKey: "mobile",
+        cell: (info) => info.getValue(),
+        header: "Phone Number",
+      },
+      {
+        accessorKey: "gender",
+        cell: (info) => info.getValue(),
+        header: "Gender",
+      },
+      {
+        accessorKey: "course",
+        cell: (info) => info.getValue(),
+        header: "Course",
+      },
+      {
+        accessorKey: "createdAt",
+        cell: (info) => new Date(info.getValue()).toLocaleDateString(),
+        header: "Create Date",
       },
       {
         accessorKey: "_id",
-        cell: (info) => info.getValue(),
-        header: "User ID",
+        cell: (info) => (
+          <div className="action-btns">
+            <button
+              className="btn"
+              onClick={() => props.onEdit(info.getValue())}
+            >
+              Edit
+            </button>
+            <button
+              className="d-btn"
+              onClick={() => props.onDelete(info.getValue())}
+            >
+              Delete
+            </button>
+          </div>
+        ),
+        header: "Actions",
       },
     ],
-    []
+    [props]
   );
 
   const table = useReactTable({
     columns,
-    data,
+    data: props.data,
     debugTable: true,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,
-
     state: {
       sorting,
     },
-    // autoResetPageIndex: false, // turn off page index reset when sorting or filtering - default on/true
-    // enableMultiSort: false, //Don't allow shift key to sort multiple columns - default on/true
-    // enableSorting: false, // - default on/true
-    // enableSortingRemoval: false, //Don't allow - default on/true
-    // isMultiSortEvent: (e) => true, //Make all clicks multi-sort - default requires `shift` key
-    // maxMultiSortColCount: 3, // only allow 3 columns to be sorted at once - default is Infinity
   });
 
   return (
-    <table>
-      <thead>
+    <table className="employee-table">
+      <thead className="table-header">
         {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
+          <tr className="" key={headerGroup.id}>
             {headerGroup.headers.map((header) => {
               return (
                 <th key={header.id} colSpan={header.colSpan}>
@@ -86,26 +131,20 @@ function EmployeeTable({ data }) {
           </tr>
         ))}
       </thead>
-      <tbody>
-        {table
-          .getRowModel()
-          .rows.slice(0, 10)
-          .map((row) => {
-            return (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => {
-                  return (
-                    <td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
+      <tbody className="">
+        {table.getRowModel().rows.map((row) => {
+          return (
+            <tr className="" key={row.id}>
+              {row.getVisibleCells().map((cell) => {
+                return (
+                  <td className="" key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                );
+              })}
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );

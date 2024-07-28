@@ -3,8 +3,9 @@
   justify-content: space-between;
   align-items: center;
   padding-inline: 14px;
-  padding-block: 4px;
-  border-bottom: 1px solid black;
+  padding-block: 5px;
+  background-color: rgb(235, 235, 235);
+  border-radius: 5px;
 }
 
 .logo {
@@ -13,7 +14,18 @@
 
 .menu-list {
   display: flex;
-  gap: 20px;
+  gap: 40px;
   align-items: center;
   list-style: none;
+}
+.btn {
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  background-color: rgb(52, 183, 243);
+}
+.link {
+  color: rgb(43, 43, 43);
+  text-decoration: none;
 }
