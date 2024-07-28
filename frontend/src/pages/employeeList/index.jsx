@@ -30,6 +30,7 @@ function Employeelist() {
           params: {
             skip: (page - 1) * itemsPerPage,
             limit: itemsPerPage,
+            sortBy: "createdAt",
           },
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -37,8 +38,17 @@ function Employeelist() {
           },
         })
         .then((res) => {
+          const startSerialNumber = (page - 1) * itemsPerPage + 1;
+
+          const employeesWithSerialNumber = res.data.data.map(
+            (employee, index) => ({
+              ...employee,
+              serialNumber: startSerialNumber + index,
+            })
+          );
+
           setEmployees({
-            data: res.data.data,
+            data: employeesWithSerialNumber,
             total: res.data.total,
           });
         })
@@ -67,7 +77,7 @@ function Employeelist() {
         alert("Employee deleted successfully");
         setEmployees((prev) => ({
           ...prev,
-          data: prev.data.filter((emp) => emp.employeeId !== id),
+          data: prev.data.filter((emp) => emp._id !== id),
         }));
       })
       .catch((err) => {

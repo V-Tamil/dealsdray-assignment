@@ -12,7 +12,7 @@ function EmployeeTable(props) {
   const columns = useMemo(
     () => [
       {
-        accessorKey: "employeeId",
+        accessorKey: "serialNumber",
         cell: (info) => info.getValue(),
         header: "Serial No",
       },

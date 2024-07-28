@@ -24,6 +24,7 @@
   border: none;
   color: white;
   background-color: rgb(52, 183, 243);
+  cursor: pointer;
 }
 .link {
   color: rgb(43, 43, 43);
