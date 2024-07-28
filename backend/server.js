@@ -38,7 +38,16 @@ app.post("/sign-up", async (req, res) => {
 
     const user = new User({ email, username, password: hashedPassword });
     await user.save();
-    res.status(201).json({ message: "User created successfully" });
+
+    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "2h" });
+    res.status(200).json({
+      data: {
+        token,
+        userId: user._id,
+        username: user.username,
+        email: user.email,
+      },
+    });
   } catch (error) {
     res.status(400).json({ error: "Error creating user" });
   }
@@ -79,7 +88,7 @@ app.post("/sign-in", async (req, res) => {
 // Create Employee
 app.post("/employee", authMiddleware, async (req, res) => {
   try {
-    const { name, email, mobile, designation, gender, course, image } =
+    const { name, email, mobile, designation, gender, courses, image } =
       req.body;
     const employee = new Employee({
       image,
@@ -88,7 +97,7 @@ app.post("/employee", authMiddleware, async (req, res) => {
       mobile,
       designation,
       gender,
-      course,
+      courses,
     });
     await employee.save();
     res
@@ -105,9 +114,7 @@ app.post("/employee/:id", authMiddleware, async (req, res) => {
     const data = await Employee.findOne({
       $or: [{ _id: req.params.id }, { employeeId: req.params.id }],
     });
-    res
-      .status(200)
-      .json({ message: "Employee created successfully", data });
+    res.status(200).json({ message: "Employee created successfully", data });
   } catch (error) {
     res.status(400).json({ error: "Error creating employee" });
   }
@@ -147,8 +154,8 @@ app.get("/employees", authMiddleware, async (req, res) => {
 // Update Employee
 app.patch("/employee/:id", authMiddleware, async (req, res) => {
   try {
-    const employee = await Employee.findByIdAndUpdate(
-      req.params.id,
+    const employee = await Employee.findOneAndUpdate(
+      { employeeId: req.params.id },
       { $set: req.body },
       { new: true }
     );
@@ -162,7 +169,9 @@ app.patch("/employee/:id", authMiddleware, async (req, res) => {
 // Delete Employee
 app.delete("/employee/:id", authMiddleware, async (req, res) => {
   try {
-    const employee = await Employee.findByIdAndDelete(req.params.id);
+    const employee = await Employee.findOneAndDelete({
+      employeeId: req.params.id,
+    });
     if (!employee) return res.status(404).json({ error: "Employee not found" });
     res.json({ message: "Employee deleted successfully" });
   } catch (error) {

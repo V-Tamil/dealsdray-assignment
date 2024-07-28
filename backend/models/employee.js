@@ -10,7 +10,7 @@ const EmployeeSchema = new mongoose.Schema(
     mobile: { type: Number, default: 0 },
     designation: { type: String, default: "" },
     gender: { type: String, default: "" },
-    course: { type: String, default: "" },
+    courses: { type: Array, default: [] },
   },
   { timestamps: true }
 );

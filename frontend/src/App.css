@@ -42,3 +42,14 @@
   text-decoration: none;
   color: #0056b3;
 }
+
+.error_message {
+  text-align: center;
+  font-size: 12px;
+  color: red;
+}
+
+.field_error {
+  font-size: 12px;
+  color: red;
+}
