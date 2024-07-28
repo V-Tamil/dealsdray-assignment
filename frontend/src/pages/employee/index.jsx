@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../../components/navbar";
 import "../../assets/employee.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "universal-cookie";
 
 function Employee(props) {
@@ -17,12 +17,32 @@ function Employee(props) {
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const params = useParams();
   const navigate = useNavigate();
 
   const user = new Cookies(null, { path: "/" }).get("user") || null;
 
   useEffect(() => {
     if (!user) navigate("/");
+    if (props.editPage) {
+      (async () => {
+        try {
+          const res = await axios.get(
+            `${process.env.REACT_APP_BACKEND_URL}/employee/${params.id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${user?.token}`,
+              },
+            }
+          );
+          setData(res.data.data);
+        } catch (error) {
+          alert("Something went wrong, Please try again");
+        }
+      })();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const validate = () => {
@@ -68,12 +88,31 @@ function Employee(props) {
     try {
       if (!validate()) return;
       setIsLoading(true);
-      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/employee`, data, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-          "Content-Type": "application/json",
-        },
-      });
+
+      if (props.editPage) {
+        await axios.patch(
+          `${process.env.REACT_APP_BACKEND_URL}/employee/${params.id}`,
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${user?.token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      } else {
+        await axios.post(
+          `${process.env.REACT_APP_BACKEND_URL}/employee`,
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${user?.token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
+      navigate("/employee/list");
     } catch (error) {
       alert("Something went wrong, Please try again");
     }
@@ -111,6 +150,7 @@ function Employee(props) {
       setData({ ...data, image: response.data });
     } catch (error) {
       console.error("Image upload error:", error);
+      alert("Something went wrong, Please try again");
     }
   };
 

@@ -1,70 +1,116 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../assets/employeeList.css";
 import Pagination from "react-js-pagination";
 
 import Navbar from "../../components/navbar";
 import EmployeeTable from "../../components/employeeTable";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import Cookies from "universal-cookie";
 
 function Employeelist() {
-  const data = [
-    {
-      _id: "66a5db5739fa1e1509f71b8c",
-      employeeId: 1,
-      image: "https://picsum.photos/200/300",
-      name: "Tamil",
-      email: "tamilselvi@mail.com",
-      mobile: 1234567890,
-      designation: "Developer",
-      gender: "Female",
-      course: "MCA",
-      createdAt: "2024-07-28T05:47:03.239Z",
-      updatedAt: "2024-07-28T05:47:03.239Z",
-      __v: 0,
-    },
-    {
-      _id: "66a5e120851d1b096edcefe0",
-      employeeId: 2,
-      image: "https://picsum.photos/200/300",
-      name: "Jone",
-      email: "jone@mail.com",
-      mobile: 0,
-      designation: "Sales",
-      gender: "Male",
-      course: "BBA",
-      createdAt: "2024-07-28T06:11:44.498Z",
-      updatedAt: "2024-07-28T06:11:44.498Z",
-      __v: 0,
-    },
-  ];
+  const [employees, setEmployees] = useState({
+    data: [],
+    total: 0,
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const user = new Cookies(null, { path: "/" }).get("user") || null;
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      return navigate("/");
+    }
+
+    const fetchEmployees = (page) => {
+      axios
+        .get(`${process.env.REACT_APP_BACKEND_URL}/employees`, {
+          params: {
+            skip: (page - 1) * itemsPerPage,
+            limit: itemsPerPage,
+          },
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          setEmployees({
+            data: res.data.data,
+            total: res.data.total,
+          });
+        })
+        .catch((err) => {
+          alert("Something went wrong, Please try again");
+        });
+    };
+
+    fetchEmployees(currentPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  function handleDelete(id) {
+    axios
+      .delete(`${process.env.REACT_APP_BACKEND_URL}/employee/${id}`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        alert("Employee deleted successfully");
+        setEmployees((prev) => ({
+          ...prev,
+          data: prev.data.filter((emp) => emp.employeeId !== id),
+        }));
+      })
+      .catch((err) => {
+        alert("Something went wrong, Please try again");
+      });
+  }
+
+  function handleEdit(id) {
+    navigate(`/employee/${id}`);
+  }
 
   return (
     <div className="employeeList_container">
       <Navbar />
       <h1 className="employeeList_title">Employee List</h1>
       <div className="employeeList_count">
-        <p>Total Count : 4</p>
+        <p>Total Count: {employees.total}</p>
         <Link to="/employee" className="btn">
           Create Employee
         </Link>
       </div>
       <div className="table_wrapper">
-        <EmployeeTable data={data} />
+        <EmployeeTable
+          data={employees.data}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+        />
       </div>
       <div className="pagination-wrapper">
         <Pagination
-          activePage={Number(1)}
+          activePage={currentPage}
           innerClass="paginate-inner"
           itemClass="paginate-item"
           firstPageText="First"
           lastPageText="Last"
-          itemsCountPerPage={Number(1)}
-          totalItemsCount={Number(10)}
+          itemsCountPerPage={itemsPerPage}
+          totalItemsCount={employees.total}
           pageRangeDisplayed={3}
-          onChange={() => {}}
+          onChange={handlePageChange}
         />
       </div>
     </div>
   );
 }
+
 export default Employeelist;

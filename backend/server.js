@@ -109,11 +109,9 @@ app.post("/employee", authMiddleware, async (req, res) => {
 });
 
 // Get Employee by Id
-app.post("/employee/:id", authMiddleware, async (req, res) => {
+app.get("/employee/:id", authMiddleware, async (req, res) => {
   try {
-    const data = await Employee.findOne({
-      $or: [{ _id: req.params.id }, { employeeId: req.params.id }],
-    });
+    const data = await Employee.findOne({ _id: req.params.id });
     res.status(200).json({ message: "Employee created successfully", data });
   } catch (error) {
     res.status(400).json({ error: "Error creating employee" });
@@ -155,7 +153,7 @@ app.get("/employees", authMiddleware, async (req, res) => {
 app.patch("/employee/:id", authMiddleware, async (req, res) => {
   try {
     const employee = await Employee.findOneAndUpdate(
-      { employeeId: req.params.id },
+      { _id: req.params.id },
       { $set: req.body },
       { new: true }
     );
@@ -170,7 +168,7 @@ app.patch("/employee/:id", authMiddleware, async (req, res) => {
 app.delete("/employee/:id", authMiddleware, async (req, res) => {
   try {
     const employee = await Employee.findOneAndDelete({
-      employeeId: req.params.id,
+      _id: req.params.id,
     });
     if (!employee) return res.status(404).json({ error: "Employee not found" });
     res.json({ message: "Employee deleted successfully" });

@@ -22,36 +22,43 @@ function EmployeeTable(props) {
           <img className="dp-image" src={info.getValue()} alt="" />
         ),
         header: "Image",
+        enableSorting: false,
       },
       {
         accessorKey: "name",
         cell: (info) => info.getValue(),
         header: "Name",
+        sortingFn: "alphanumericCaseSensitive",
       },
       {
         accessorKey: "email",
         cell: (info) => info.getValue(),
         header: "Email",
+        sortingFn: "alphanumericCaseSensitive",
       },
       {
         accessorKey: "mobile",
         cell: (info) => info.getValue(),
         header: "Phone Number",
+        enableSorting: false,
       },
       {
         accessorKey: "gender",
         cell: (info) => info.getValue(),
         header: "Gender",
+        enableSorting: false,
       },
       {
-        accessorKey: "course",
-        cell: (info) => info.getValue(),
+        accessorKey: "courses",
+        cell: (info) => info.getValue().join(","),
         header: "Course",
+        enableSorting: false,
       },
       {
         accessorKey: "createdAt",
         cell: (info) => new Date(info.getValue()).toLocaleDateString(),
         header: "Create Date",
+        sortingFn: "datetime",
       },
       {
         accessorKey: "_id",
@@ -72,6 +79,7 @@ function EmployeeTable(props) {
           </div>
         ),
         header: "Actions",
+        enableSorting: false,
       },
     ],
     [props]
