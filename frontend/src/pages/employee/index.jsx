@@ -72,7 +72,7 @@ function Employee(props) {
         </div>
         <div className="form-group">
           <button type="submit" className="submit-button">
-            Submit
+            {props.editPage ? " Update" : "Submit"}
           </button>
         </div>
       </form>

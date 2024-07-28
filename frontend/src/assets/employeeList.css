@@ -1,12 +1,13 @@
 .employeeList_container {
-  width: 80%;
-  margin: 50px auto;
-  border: 1px solid black;
+  max-width: 800px;
+  margin: 0 auto;
 }
-.employeeList_title {
-  background-color: yellow;
-  padding: 5px;
+
+.table_wrapper {
+  width: 100%;
+  overflow: auto;
 }
+
 .employeeList_count {
   display: flex;
 
@@ -14,15 +15,17 @@
   align-items: center;
   gap: 40px;
 }
-.list {
-  font-weight: 400;
-  padding: 2px;
-  padding-right: 15%;
-  background-color: rgb(81, 221, 81);
-}
+
 .thead {
   background-color: rgb(44, 152, 240);
 }
+
+.dp-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 15px;
+}
+
 .search {
   padding: 5px;
   display: flex;
@@ -47,10 +50,39 @@
   cursor: pointer;
 }
 
-.employee-table th span {
-  margin-left: 5px;
-}
-
 .employee-table tbody tr:hover {
   background-color: #f1f1f1;
+}
+
+.action-btns {
+  display: flex;
+  gap: 10px;
+}
+
+.d-btn {
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  background-color: rgb(243, 52, 52);
+}
+
+.pagination-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+
+.paginate-inner {
+  display: flex;
+  gap: 6px;
+}
+
+.paginate-item {
+  list-style: none;
+}
+
+.paginate-item a {
+  text-decoration: none;
+  color: black;
 }
