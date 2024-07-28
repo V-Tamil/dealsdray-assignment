@@ -14,7 +14,7 @@ function Employeelist() {
     total: 0,
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
   const user = new Cookies(null, { path: "/" }).get("user") || null;
 
   const navigate = useNavigate();
