@@ -64,10 +64,12 @@ app.post("/sign-in", async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "2h" });
     res.json({
-      token,
-      userId: user._id,
-      username: user.username,
-      email: user.email,
+      data: {
+        token,
+        userId: user._id,
+        username: user.username,
+        email: user.email,
+      },
     });
   } catch (error) {
     res.status(400).json({ error: "Error signing in" });
@@ -91,16 +93,30 @@ app.post("/employee", authMiddleware, async (req, res) => {
     await employee.save();
     res
       .status(200)
-      .json({ message: "Employee created successfully", employee });
+      .json({ message: "Employee created successfully", data: employee });
   } catch (error) {
     res.status(400).json({ error: "Error creating employee" });
   }
 });
 
-// Read all Employees
+// Get Employee by Id
+app.post("/employee/:id", authMiddleware, async (req, res) => {
+  try {
+    const data = await Employee.findOne({
+      $or: [{ _id: req.params.id }, { employeeId: req.params.id }],
+    });
+    res
+      .status(200)
+      .json({ message: "Employee created successfully", data });
+  } catch (error) {
+    res.status(400).json({ error: "Error creating employee" });
+  }
+});
+
+// Get all Employees
 app.get("/employees", authMiddleware, async (req, res) => {
   try {
-    const { sortBy, order = -1, searchQuery } = req.query;
+    const { sortBy, order = -1, searchQuery, limit = 10, skip = 0 } = req.query;
     let sort = {};
     if (sortBy) {
       sort[sortBy] = order;
@@ -116,8 +132,13 @@ app.get("/employees", authMiddleware, async (req, res) => {
       };
     }
 
-    const employees = await Employee.find(query).sort(sort);
-    res.json(employees);
+    const employees = await Employee.find(query)
+      .sort(sort)
+      .limit(parseInt(limit))
+      .skip(parseInt(skip));
+
+    const count = await Employee.countDocuments(query);
+    res.json({ data: employees, total: count });
   } catch (error) {
     res.status(400).json({ error: "Error fetching employees" });
   }
@@ -132,7 +153,7 @@ app.patch("/employee/:id", authMiddleware, async (req, res) => {
       { new: true }
     );
     if (!employee) return res.status(404).json({ error: "Employee not found" });
-    res.json({ message: "Employee updated successfully", employee });
+    res.json({ message: "Employee updated successfully", data: employee });
   } catch (error) {
     res.status(400).json({ error: "Error updating employee" });
   }
@@ -152,12 +173,14 @@ app.delete("/employee/:id", authMiddleware, async (req, res) => {
 // File APIs
 
 // Upload file
-app.post("/upload", authMiddleware,  upload.single("image"), (req, res) => {
+app.post("/upload", authMiddleware, upload.single("image"), (req, res) => {
   try {
     const imageUrl = `${req.protocol}://${req.get("host")}/uploads/${
       req.file.filename
     }`;
-    res.status(200).json({ message: "Image uploaded successfully", imageUrl });
+    res
+      .status(200)
+      .json({ message: "Image uploaded successfully", data: imageUrl });
   } catch (error) {
     res.status(400).json({ error: "Error uploading image" });
   }
